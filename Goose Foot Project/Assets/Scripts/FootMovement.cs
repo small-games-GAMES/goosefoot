@@ -11,9 +11,11 @@ public class FootMovement : MonoBehaviour
     public GameManager gM;
 
     Rigidbody2D rB;
-    public HingeJoint2D hJ;
+    HingeJoint2D hJ;
 
-    float speed;
+    public Rigidbody2D footRB;
+
+    public float speed;
 
     bool canKick = true;
     public float kickCooldown;
@@ -24,6 +26,7 @@ public class FootMovement : MonoBehaviour
         player = ReInput.players.GetPlayer(playerNum);
 
         rB = GetComponent<Rigidbody2D>();
+        hJ = GetComponent<HingeJoint2D>();
     }
 
     // Update is called once per frame
@@ -61,6 +64,11 @@ public class FootMovement : MonoBehaviour
         hJ.useMotor = true;
 
         yield return new WaitForSeconds(kickCooldown);
+
+        hJ.useMotor = false;
+        footRB.velocity = new Vector2(0, 0);
+
+        yield return new WaitForSeconds(kickCooldown / 2);
 
         canKick = true;
     }
