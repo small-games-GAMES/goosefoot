@@ -11,16 +11,19 @@ public class FootMovement : MonoBehaviour
     public GameManager gM;
 
     Rigidbody2D rB;
-    HingeJoint2D hJ;
+    public HingeJoint2D hJF, hJB;
     JointMotor2D hingeMotor;
 
     public Rigidbody2D footRB;
 
     public float speed;
-    public float motorSpeed;
+    Vector2 moveInp;
 
     bool canKick = true;
     public float kickCooldown;
+
+    public LineRenderer legRenderer;
+    public Vector3 origLegPos;
 
     // Start is called before the first frame update
     void Start()
@@ -28,53 +31,88 @@ public class FootMovement : MonoBehaviour
         player = ReInput.players.GetPlayer(playerNum);
 
         rB = GetComponent<Rigidbody2D>();
-        hJ = GetComponent<HingeJoint2D>();
-        hingeMotor = hJ.motor;
+        //hJ = GetComponent<HingeJoint2D>();
+
+        origLegPos = legRenderer.GetPosition(0);
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector2 moveInp = new Vector2(player.GetAxis("HXMove"), player.GetAxis("HYMove"));
-        rB.velocity = moveInp * speed;
+        moveInp = new Vector2(player.GetAxis("HXMove"), player.GetAxis("HYMove"));
 
-        if (player.GetButtonDown("Kick"))
+        legRenderer.SetPosition(0, origLegPos);
+        legRenderer.SetPosition(1, transform.TransformPoint(Vector3.zero));
+
+        if (player.GetButtonDown("KickForward"))
         {
-            Kick();
+            Kick(footKickForward());
+        }
+
+        if (player.GetButtonDown("KickBackward"))
+        {
+
+            Kick(footKickBackward());
+
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    //you always want to put physics stuff in FixedUpdate!
+    private void FixedUpdate()
+    {
+
+        rB.velocity = moveInp * speed;
+
+    }
+
+    //this would signify if the knee hit the goose the human wins rather than the foot hitting the goose
+    /*private void OnCollisionEnter2D(Collision2D collision)
     {
         if(collision.gameObject.tag == "Goose")
         {
             gM.HWin();
         }
-    }
+    }*/
 
-    void Kick()
+    void Kick(IEnumerator _insIEnumerator)
     {
         if(canKick == true)
         {
             canKick = false;
 
-            StartCoroutine(footKickForward());
+            StartCoroutine(_insIEnumerator);
         }
     }
 
     IEnumerator footKickForward()
     {
 
-        hingeMotor.motorSpeed = motorSpeed;
-        hJ.useMotor = true;
+        hJF.useMotor = true;
 
         yield return new WaitForSeconds(kickCooldown);
 
-        hJ.useMotor = false;
+        hJF.useMotor = false;
         footRB.velocity = new Vector2(0, 0);
 
         yield return new WaitForSeconds(kickCooldown / 2);
 
         canKick = true;
     }
+
+    IEnumerator footKickBackward()
+    {
+
+        hJB.useMotor = true;
+
+        yield return new WaitForSeconds(kickCooldown);
+
+        hJB.useMotor = false;
+        footRB.velocity = new Vector2(0, 0);
+
+        yield return new WaitForSeconds(kickCooldown / 2);
+
+        canKick = true;
+    }
+
 }
