@@ -833,7 +833,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 5
+  m_LinearDrag: 50
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
@@ -953,7 +953,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveH: 0
   moveV: 0
-  speed: 5
+  speed: 2.5
   rb2d: {fileID: 1324058375}
   playerId: 0
 --- !u!1 &1850785432

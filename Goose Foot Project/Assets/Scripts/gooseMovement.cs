@@ -20,6 +20,7 @@ public class gooseMovement : MonoBehaviour
     {
 
         player = ReInput.players.GetPlayer(playerId);
+        Cursor.visible = false;
         
     }
 
