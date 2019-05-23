@@ -12,10 +12,12 @@ public class FootMovement : MonoBehaviour
 
     Rigidbody2D rB;
     HingeJoint2D hJ;
+    JointMotor2D hingeMotor;
 
     public Rigidbody2D footRB;
 
     public float speed;
+    public float motorSpeed;
 
     bool canKick = true;
     public float kickCooldown;
@@ -27,6 +29,7 @@ public class FootMovement : MonoBehaviour
 
         rB = GetComponent<Rigidbody2D>();
         hJ = GetComponent<HingeJoint2D>();
+        hingeMotor = hJ.motor;
     }
 
     // Update is called once per frame
@@ -55,12 +58,14 @@ public class FootMovement : MonoBehaviour
         {
             canKick = false;
 
-            StartCoroutine(footKick());
+            StartCoroutine(footKickForward());
         }
     }
 
-    IEnumerator footKick()
+    IEnumerator footKickForward()
     {
+
+        hingeMotor.motorSpeed = motorSpeed;
         hJ.useMotor = true;
 
         yield return new WaitForSeconds(kickCooldown);
