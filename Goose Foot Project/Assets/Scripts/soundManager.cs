@@ -8,4 +8,11 @@ public class soundManager : MonoBehaviour
     public AudioSource sauce;
     public AudioClip honk;
 
+    public void playHonk()
+    {
+
+        sauce.PlayOneShot(honk, Random.Range(0.9f, 1.2f));
+
+    }
+
 }

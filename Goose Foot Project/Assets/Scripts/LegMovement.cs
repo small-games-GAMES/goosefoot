@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Rewired;
 
-public class FootMovement : MonoBehaviour
+public class LegMovement : MonoBehaviour
 {
     Player player;
     public int playerNum;
@@ -23,7 +23,7 @@ public class FootMovement : MonoBehaviour
     public float kickCooldown;
 
     public LineRenderer legRenderer;
-    public Vector3 origLegPos;
+    Vector3 origLegPos;
 
     // Start is called before the first frame update
     void Start()
@@ -42,6 +42,8 @@ public class FootMovement : MonoBehaviour
     {
         moveInp = new Vector2(player.GetAxis("HXMove"), player.GetAxis("HYMove"));
 
+        //anchors origin point of the leg line renderer and updates the end point of the upper leg as the knee moves (uses transformpoint because it's a child object)
+        //This makes it look like the leg is all one piece
         legRenderer.SetPosition(0, origLegPos);
         legRenderer.SetPosition(1, transform.TransformPoint(Vector3.zero));
 

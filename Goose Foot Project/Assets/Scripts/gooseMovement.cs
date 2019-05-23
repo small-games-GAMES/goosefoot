@@ -14,13 +14,26 @@ public class gooseMovement : MonoBehaviour
     public int playerId;
     public Player player;
 
+    public bool canHonk;
+    public float honkCooldown;
+    public GameObject honkCollider;
+
+    public soundManager sm;
+
 
     // Start is called before the first frame update
     void Start()
     {
 
         player = ReInput.players.GetPlayer(playerId);
+
+        //locks cursor in place and makes it invisible
         Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
+        honkCollider.SetActive(false);
+
+        canHonk = true;
         
     }
 
@@ -29,6 +42,13 @@ public class gooseMovement : MonoBehaviour
     {
 
         getPlayerInput();
+
+        if (player.GetButtonDown("Honk") && canHonk)
+        {
+
+            StartCoroutine(honk());
+
+        }
         
     }
 
@@ -51,6 +71,28 @@ public class gooseMovement : MonoBehaviour
     {
 
         rb2d.velocity = new Vector2(moveH * speed, moveV * speed);
+
+    }
+
+    IEnumerator honk()
+    {
+
+        canHonk = false;
+        sm.playHonk();
+
+        //turns on a collider for the honk
+        honkCollider.SetActive(true);
+
+        //waits for the sound to play
+        yield return new WaitForSeconds(sm.honk.length);
+
+        //turns off collider for honk
+        honkCollider.SetActive(false);
+
+        //waits a cooldown before the goose is able to honk again
+        yield return new WaitForSeconds(honkCooldown);
+
+        canHonk = true;
 
     }
 
