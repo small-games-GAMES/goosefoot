@@ -10,11 +10,7 @@ public class footScript : MonoBehaviour
     public GameManager gm;
     public LegMovement lm;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Transform ankleTransform;
 
     // Update is called once per frame
     void Update()
@@ -39,7 +35,7 @@ public class footScript : MonoBehaviour
     {
 
         calfRenderer.SetPosition(0, lm.gameObject.transform.TransformPoint(Vector3.zero));
-        calfRenderer.SetPosition(1, transform.TransformPoint(Vector3.zero));
+        calfRenderer.SetPosition(1, ankleTransform.TransformPoint(Vector3.zero));
 
     }
 
