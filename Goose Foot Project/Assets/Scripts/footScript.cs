@@ -22,7 +22,7 @@ public class footScript : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Goose")
+        if (collision.gameObject.tag == "gooseHead")
         {
             gm.HWin();
         }

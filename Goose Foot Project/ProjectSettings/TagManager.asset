@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Goose
   - body
+  - gooseHead
   layers:
   - Default
   - TransparentFX

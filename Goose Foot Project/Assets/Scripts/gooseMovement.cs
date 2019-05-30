@@ -59,6 +59,7 @@ public class gooseMovement : MonoBehaviour
 
     }
 
+    //gets player input for the Goose's body
     void getPlayerInput()
     {
 
@@ -67,6 +68,7 @@ public class gooseMovement : MonoBehaviour
 
     }
 
+    //actually moves the Goose's body
     void movePlayer()
     {
 
@@ -74,6 +76,7 @@ public class gooseMovement : MonoBehaviour
 
     }
 
+    //turns on the honk collider for a little bit and then turns it off again
     IEnumerator honk()
     {
 
