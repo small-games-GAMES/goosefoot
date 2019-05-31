@@ -5,6 +5,11 @@ using UnityEngine;
 public class footScript : MonoBehaviour
 {
 
+    /* Notes for later
+     * make sure the calf is its own object, or else there won't be any collision on it (make life easier on yourself)
+     * to add a collider to the linerenderer: https://answers.unity.com/questions/768997/how-can-i-add-a-collider-to-my-line-renderer-scrip.html  use the first answer
+     */
+
     public LineRenderer calfRenderer;
 
     public GameManager gm;
