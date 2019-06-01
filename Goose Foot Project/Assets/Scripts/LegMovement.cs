@@ -9,6 +9,7 @@ public class LegMovement : MonoBehaviour
     public int playerNum;
 
     public GameManager gM;
+    public soundManager sm;
 
     Rigidbody2D rB;
     public HingeJoint2D hJF, hJB;

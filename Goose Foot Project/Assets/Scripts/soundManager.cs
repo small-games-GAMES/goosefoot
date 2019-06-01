@@ -6,7 +6,7 @@ public class soundManager : MonoBehaviour
 {
 
     public AudioSource sauce;
-    public AudioClip honk;
+    public AudioClip honk, kickSound, hitHeadSound;
 
     public void playHonk()
     {
