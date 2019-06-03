@@ -14,6 +14,7 @@ public class LegMovement : MonoBehaviour
     Rigidbody2D rB;
     public HingeJoint2D hJF, hJB;
     JointMotor2D hingeMotor;
+    public float maxAngVel;
 
     public Rigidbody2D footRB;
 
@@ -21,8 +22,10 @@ public class LegMovement : MonoBehaviour
     Vector2 moveInp;
 
     bool canKick = true;
+    public bool isKicking = false;
     public float kickCooldown;
 
+    //line renderer stuff so the leg looks like it's one solid piece
     public LineRenderer legRenderer;
     Vector3 origLegPos;
 
@@ -65,7 +68,10 @@ public class LegMovement : MonoBehaviour
     private void FixedUpdate()
     {
 
+        //controls the movement of the leg
         rB.velocity = moveInp * speed;
+
+        clampFootVelocity();
 
     }
 
@@ -88,13 +94,16 @@ public class LegMovement : MonoBehaviour
         }
     }
 
+    //turns on the motor for the joint that moves the leg forward and then turns it off after a bit
     IEnumerator footKickForward()
     {
 
         hJF.useMotor = true;
+        isKicking = true;
 
         yield return new WaitForSeconds(kickCooldown);
 
+        isKicking = false;
         hJF.useMotor = false;
         footRB.velocity = new Vector2(0, 0);
 
@@ -103,19 +112,52 @@ public class LegMovement : MonoBehaviour
         canKick = true;
     }
 
+    //turns on the motor for the joint that moves the leg backward and then turns it off after a bit
     IEnumerator footKickBackward()
     {
 
         hJB.useMotor = true;
+        isKicking = true;
 
         yield return new WaitForSeconds(kickCooldown);
 
         hJB.useMotor = false;
+        isKicking = false;
         footRB.velocity = new Vector2(0, 0);
 
         yield return new WaitForSeconds(kickCooldown / 2);
 
         canKick = true;
+    }
+
+    //clamps the angular velocity of the foot
+    void clampFootVelocity()
+    {
+
+        //if the foot's angular velocity is greater than the max angular velocity and it isn't kicking, it clamps to the positive max angular velocity
+        if (footRB.angularVelocity > maxAngVel && isKicking == false)
+        {
+
+            footRB.angularVelocity = maxAngVel;
+
+        }
+
+        //if the foot's angular velocity is less than the negative max angular velocity and isn't kicking, it clamps to the negative max angular velocity
+        else if (footRB.angularVelocity < -maxAngVel && isKicking == false)
+        {
+
+            footRB.angularVelocity = -maxAngVel;
+
+        }
+
+        //otherwise, it's just equal to its normal angular velocity
+        else
+        {
+
+            footRB.angularVelocity = footRB.angularVelocity;
+
+        }
+
     }
 
 }
