@@ -38,7 +38,6 @@ public class LegMovement : MonoBehaviour
         //hJ = GetComponent<HingeJoint2D>();
 
         origLegPos = legRenderer.GetPosition(0);
-
     }
 
     // Update is called once per frame
@@ -58,21 +57,17 @@ public class LegMovement : MonoBehaviour
 
         if (player.GetButtonDown("KickBackward"))
         {
-
             Kick(footKickBackward());
-
         }
     }
 
     //you always want to put physics stuff in FixedUpdate!
     private void FixedUpdate()
     {
-
         //controls the movement of the leg
         rB.velocity = moveInp * speed;
 
         clampFootVelocity();
-
     }
 
     //this would signify if the knee hit the goose the human wins rather than the foot hitting the goose
@@ -97,7 +92,6 @@ public class LegMovement : MonoBehaviour
     //turns on the motor for the joint that moves the leg forward and then turns it off after a bit
     IEnumerator footKickForward()
     {
-
         hJF.useMotor = true;
         isKicking = true;
 
@@ -115,7 +109,6 @@ public class LegMovement : MonoBehaviour
     //turns on the motor for the joint that moves the leg backward and then turns it off after a bit
     IEnumerator footKickBackward()
     {
-
         hJB.useMotor = true;
         isKicking = true;
 
@@ -133,31 +126,22 @@ public class LegMovement : MonoBehaviour
     //clamps the angular velocity of the foot
     void clampFootVelocity()
     {
-
         //if the foot's angular velocity is greater than the max angular velocity and it isn't kicking, it clamps to the positive max angular velocity
         if (footRB.angularVelocity > maxAngVel && isKicking == false)
         {
-
             footRB.angularVelocity = maxAngVel;
-
         }
 
         //if the foot's angular velocity is less than the negative max angular velocity and isn't kicking, it clamps to the negative max angular velocity
         else if (footRB.angularVelocity < -maxAngVel && isKicking == false)
         {
-
             footRB.angularVelocity = -maxAngVel;
-
         }
 
         //otherwise, it's just equal to its normal angular velocity
         else
         {
-
             footRB.angularVelocity = footRB.angularVelocity;
-
         }
-
     }
-
 }
