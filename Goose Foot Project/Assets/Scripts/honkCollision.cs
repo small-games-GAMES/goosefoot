@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class honkCollision : MonoBehaviour
 {
-
     public GameManager gm;
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -14,5 +13,4 @@ public class honkCollision : MonoBehaviour
             gm.GWin();
         }
     }
-
 }
