@@ -12,10 +12,15 @@ public class footScript : MonoBehaviour
 
     public LineRenderer calfRenderer;
 
-    public GameManager gm;
+    GameManager gM;
     public LegMovement lm;
 
     public Transform ankleTransform;
+
+    private void Start()
+    {
+        gM = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -27,7 +32,7 @@ public class footScript : MonoBehaviour
     {
         if (collision.gameObject.tag == "gooseHead" && lm.isKicking)
         {
-            gm.HWin();
+            gM.HWin();
         }
     }
 

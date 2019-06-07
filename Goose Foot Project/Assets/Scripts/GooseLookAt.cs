@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GooseLookAt : MonoBehaviour
 {
-    Quaternion facing;
+    Quaternion facing; //makes sure the honk is always pointing towards the human
 
     // Start is called before the first frame update
     void Start()

@@ -8,7 +8,6 @@ public class LegMovement : MonoBehaviour
     Player player;
     public int playerNum;
 
-    public GameManager gM;
     public soundManager sm;
 
     Rigidbody2D rB;
@@ -19,15 +18,15 @@ public class LegMovement : MonoBehaviour
     public Rigidbody2D footRB;
 
     public float speed;
-    public float conSpeed;
+    public float conSpeed; //speed when using a controller
+    public float kSpeedMod; //the amount that the speed is multiplied by when kicking
     Vector2 moveInp;
 
     bool canKick = true;
     public bool isKicking = false;
     public float kickCooldown;
 
-    //line renderer stuff so the leg looks like it's one solid piece
-    public LineRenderer legRenderer;
+    public LineRenderer legRenderer; //line renderer stuff so the leg looks like it's one solid piece
     Vector3 origLegPos;
 
     bool conSwitch = false;
@@ -38,7 +37,6 @@ public class LegMovement : MonoBehaviour
         player = ReInput.players.GetPlayer(playerNum);
 
         rB = GetComponent<Rigidbody2D>();
-        //hJ = GetComponent<HingeJoint2D>();
 
         origLegPos = legRenderer.GetPosition(0);
     }
@@ -73,23 +71,20 @@ public class LegMovement : MonoBehaviour
         }
     }
 
-    //you always want to put physics stuff in FixedUpdate!
     private void FixedUpdate()
     {
         //controls the movement of the leg
-        rB.velocity = moveInp * speed;
+        if(isKicking == true)
+        {
+            rB.velocity = moveInp * speed * kSpeedMod;
+        }
+        else
+        {
+            rB.velocity = moveInp * speed;
+        }
 
         clampFootVelocity();
     }
-
-    //this would signify if the knee hit the goose the human wins rather than the foot hitting the goose
-    /*private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if(collision.gameObject.tag == "Goose")
-        {
-            gM.HWin();
-        }
-    }*/
 
     void Kick(IEnumerator _insIEnumerator)
     {
@@ -104,13 +99,14 @@ public class LegMovement : MonoBehaviour
     //turns on the motor for the joint that moves the leg forward and then turns it off after a bit
     IEnumerator footKickForward()
     {
+        //SM.KICK SOUND
         hJF.useMotor = true;
         isKicking = true;
 
         yield return new WaitForSeconds(kickCooldown);
 
-        isKicking = false;
         hJF.useMotor = false;
+        isKicking = false;
         footRB.velocity = new Vector2(0, 0);
 
         yield return new WaitForSeconds(kickCooldown / 2);
@@ -121,6 +117,7 @@ public class LegMovement : MonoBehaviour
     //turns on the motor for the joint that moves the leg backward and then turns it off after a bit
     IEnumerator footKickBackward()
     {
+        //SM.KICK SOUND
         hJB.useMotor = true;
         isKicking = true;
 

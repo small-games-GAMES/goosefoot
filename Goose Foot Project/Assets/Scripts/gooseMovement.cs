@@ -5,20 +5,20 @@ using Rewired;
 
 public class gooseMovement : MonoBehaviour
 {
+    public int playerId;
+    public Player player;
+
+    public soundManager sm;
+
+    public Rigidbody2D rb2d;
+
     public float moveH, moveV;
     public float speed;
     public float conSpeed;
 
-    public Rigidbody2D rb2d;
-
-    public int playerId;
-    public Player player;
-
+    public BoxCollider2D honkCollider;
     public bool canHonk;
     public float honkCooldown;
-    public BoxCollider2D honkCollider;
-
-    public soundManager sm;
 
     bool useCon = false;
 
