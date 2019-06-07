@@ -19,6 +19,7 @@ public class LegMovement : MonoBehaviour
     public Rigidbody2D footRB;
 
     public float speed;
+    public float conSpeed;
     Vector2 moveInp;
 
     bool canKick = true;
@@ -28,6 +29,8 @@ public class LegMovement : MonoBehaviour
     //line renderer stuff so the leg looks like it's one solid piece
     public LineRenderer legRenderer;
     Vector3 origLegPos;
+
+    bool conSwitch = false;
 
     // Start is called before the first frame update
     void Start()
@@ -43,6 +46,15 @@ public class LegMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (player.GetButton("ConSwitch"))
+        {
+            if(conSwitch == false)
+            {
+                conSwitch = true;
+                speed = conSpeed;
+            }
+        }
+
         moveInp = new Vector2(player.GetAxis("HXMove"), player.GetAxis("HYMove"));
 
         //anchors origin point of the leg line renderer and updates the end point of the upper leg as the knee moves (uses transformpoint because it's a child object)

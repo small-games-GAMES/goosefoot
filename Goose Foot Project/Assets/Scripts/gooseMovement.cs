@@ -7,6 +7,7 @@ public class gooseMovement : MonoBehaviour
 {
     public float moveH, moveV;
     public float speed;
+    public float conSpeed;
 
     public Rigidbody2D rb2d;
 
@@ -19,10 +20,11 @@ public class gooseMovement : MonoBehaviour
 
     public soundManager sm;
 
+    bool useCon = false;
+
     // Start is called before the first frame update
     void Start()
     {
-
         player = ReInput.players.GetPlayer(playerId);
 
         //locks cursor in place and makes it invisible
@@ -32,13 +34,23 @@ public class gooseMovement : MonoBehaviour
         honkCollider.enabled = false;
 
         canHonk = true;
-        
     }
 
     // Update is called once per frame
     void Update()
     {
-        getPlayerInput();
+        if (player.GetButton("ConSwitch"))
+        {
+            if(useCon == false)
+            {
+                useCon = true;
+                speed = conSpeed;
+            }
+        }
+
+        //gets player input for the Goose's body
+        moveH = player.GetAxisRaw("GXMove");
+        moveV = player.GetAxisRaw("GYMove");
 
         if (player.GetButtonDown("Honk") && canHonk)
         {
@@ -48,19 +60,7 @@ public class gooseMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        movePlayer();
-    }
-
-    //gets player input for the Goose's body
-    void getPlayerInput()
-    {
-        moveH = player.GetAxisRaw("GXMove");
-        moveV = player.GetAxisRaw("GYMove");
-    }
-
-    //actually moves the Goose's body
-    void movePlayer()
-    {
+        //actually moves the Goose's body
         rb2d.velocity = new Vector2(moveH * speed, moveV * speed);
     }
 
