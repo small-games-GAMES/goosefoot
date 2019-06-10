@@ -16,6 +16,7 @@ public class gooseMovement : MonoBehaviour
     public float speed;
     public float conSpeed;
 
+    public SpriteRenderer honkSR;
     public BoxCollider2D honkCollider;
     public bool canHonk;
     public float honkCooldown;
@@ -71,6 +72,7 @@ public class gooseMovement : MonoBehaviour
         sm.playHonk();
 
         //turns on a collider for the honk
+        honkSR.enabled = true;
         honkCollider.enabled = true;
 
         //waits for the sound to play
@@ -78,6 +80,7 @@ public class gooseMovement : MonoBehaviour
 
         //turns off collider for honk
         honkCollider.enabled = false;
+        honkSR.enabled = false;
 
         //waits a cooldown before the goose is able to honk again
         yield return new WaitForSeconds(honkCooldown);

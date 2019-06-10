@@ -21,6 +21,7 @@ public class TextManager : MonoBehaviour
     {
         winTitle.text = humanWin;
         winTitle.enabled = true;
+        print("getim");
     }
 
     public void GWin()

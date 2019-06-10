@@ -46,6 +46,11 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if(sm == null)
+        {
+            sm = GameObject.FindGameObjectWithTag("SoundMan").GetComponent<soundManager>();
+        }
+
         //controls title scene stuff
         if(SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(0))
         {
@@ -87,10 +92,12 @@ public class GameManager : MonoBehaviour
         //if any button is pressed and canReset is equal to true, it resets the game
         if (player.GetAnyButton() && canReset)
         {
+            canReset = false;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
         if (Input.anyKey && canReset)
         {
+            canReset = false;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
@@ -121,7 +128,7 @@ public class GameManager : MonoBehaviour
     //waits for the length of the win sound effect and then some and then enables reset
     IEnumerator waitThenReset()
     {
-        yield return new WaitForSeconds(sm.winSound.length + 1.5f);
+        yield return new WaitForSeconds(sm.winSound.length + 2.5f);
 
         canReset = true;
         tXM.ResPrompt();
