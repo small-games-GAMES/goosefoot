@@ -28,12 +28,19 @@ public class GameManager : MonoBehaviour
 
     Player player;
     public int playerNum;
-    bool useCon = false; //are they using a controller
+    public bool useCon = false; //are they using a controller
+    public bool canInput = true;
 
+    soundManager sm;
     TitleManager tM;
     TextManager tXM;
-    soundManager sm;
 
+    //title screen stuff
+    bool started = false;
+    bool hReady = false;
+    bool gReady = false;
+
+    bool end = false;
     public bool canReset;
 
     // Start is called before the first frame update
@@ -46,6 +53,15 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if(canInput == false)
+        {
+            playerNum = 2;
+        }
+        else
+        {
+            playerNum = 0;
+        }
+
         if(sm == null)
         {
             sm = GameObject.FindGameObjectWithTag("SoundMan").GetComponent<soundManager>();
@@ -54,12 +70,28 @@ public class GameManager : MonoBehaviour
         //controls title scene stuff
         if(SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(0))
         {
+            if(player.GetButtonDown("KickForward") || player.GetButtonDown("KickBackward"))
+            {
+                hReady = true;
+            }
+            if (player.GetButtonDown("Honk"))
+            {
+                gReady = true;
+            }
+
             if (tM == null)
             {
                 if (GameObject.FindGameObjectWithTag("TitleMan") != null)
                 {
                     tM = GameObject.FindGameObjectWithTag("TitleMan").GetComponent<TitleManager>();
                 }
+            }
+
+            if(started == false)
+            {
+                started = true;
+
+                canInput = false;
             }
 
             //switches from controller to keyboard preferred input and back
@@ -93,16 +125,20 @@ public class GameManager : MonoBehaviour
         if (player.GetAnyButton() && canReset)
         {
             canReset = false;
+            end = false;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
         if (Input.anyKey && canReset)
         {
             canReset = false;
+            end = false;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
         if (player.GetButtonDown("Restart"))
         {
+            end = false;
+            started = false;
             SceneManager.LoadScene(0);
         }
     }
@@ -110,19 +146,27 @@ public class GameManager : MonoBehaviour
     //if the human wins, it plays the win sound effect, changes title card to say that the human won, and then starts the reset coroutine
     public void HWin()
     {
-        sm.playWin();
-        tXM.HWin();
+        if(end == false)
+        {
+            end = true;
+            sm.playWin();
+            tXM.HWin();
 
-        StartCoroutine(waitThenReset());
+            StartCoroutine(waitThenReset());
+        }
     }
 
     //if the goose wins, it plays the win sound effect, changes title card to say the goose won, and then starts the reset coroutine
     public void GWin()
     {
-        sm.playWin();
-        tXM.GWin();
+        if (end == false)
+        {
+            end = true;
+            sm.playWin();
+            tXM.GWin();
 
-        StartCoroutine(waitThenReset());
+            StartCoroutine(waitThenReset());
+        }
     }
 
     //waits for the length of the win sound effect and then some and then enables reset
