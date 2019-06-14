@@ -6,6 +6,10 @@ using TMPro;
 
 public class TextManager : MonoBehaviour
 {
+    public TMP_Text startText;
+    public string ready, set, go;
+    public bool started = false;
+
     public TMP_Text winTitle;
     public string gooseWin, humanWin;
 
@@ -14,7 +18,27 @@ public class TextManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        StartCoroutine(startRoutine());
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+    IEnumerator startRoutine()
+    {
+        startText.text = ready;
+        startText.enabled = true;
+        yield return new WaitForSeconds(2.5f);
+
+        startText.text = set;
+        yield return new WaitForSeconds(2.5f);
+
+        startText.text = go;
+        yield return new WaitForSeconds(0.5f);
+        started = true;
     }
 
     public void HWin()
@@ -33,11 +57,5 @@ public class TextManager : MonoBehaviour
     public void ResPrompt()
     {
         resetText.SetActive(true);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

@@ -29,19 +29,23 @@ public class GameManager : MonoBehaviour
     Player player;
     public int playerNum;
     public bool useCon = false; //are they using a controller
-    public bool canInput = true;
+    public bool canInput = true; //gm taking inputs
+
+    public int titleScene, gameScene; //title and game scenes by build number
 
     soundManager sm;
     TitleManager tM;
     TextManager tXM;
 
-    //title screen stuff
-    bool started = false;
-    bool hReady = false;
-    bool gReady = false;
+    public bool switching = false; //tells the gm that it is loading a new scene
 
-    bool end = false;
-    public bool canReset;
+    //title screen stuff
+    bool started = false; //title screen text sequence has begun
+    bool hReady = false; //human ready to go
+    bool gReady = false; //goose ready to go
+
+    bool end = false; //game has ended
+    public bool canReset; //can reset game to play another round
 
     // Start is called before the first frame update
     void Start()
@@ -53,7 +57,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if(canInput == false)
+        if (canInput == false) //prevents input into the gm until we want them
         {
             playerNum = 2;
         }
@@ -68,15 +72,26 @@ public class GameManager : MonoBehaviour
         }
 
         //controls title scene stuff
-        if(SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(0))
+        if(SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(titleScene))
         {
-            if(player.GetButtonDown("KickForward") || player.GetButtonDown("KickBackward"))
+            //on title screen, starting
+            if (started == false)
+            {
+                started = true;
+            }
+
+            //checking to see if players are ready to continue to the game
+            if (player.GetButtonDown("KickForward") || player.GetButtonDown("KickBackward"))
             {
                 hReady = true;
+                //SM.READYSOUND
+                tM.hReady.SetActive(true); //sets active ready marker
             }
             if (player.GetButtonDown("Honk"))
             {
                 gReady = true;
+                //SM.READYSOUND
+                tM.gReady.SetActive(true); //sets active ready marker
             }
 
             if (tM == null)
@@ -85,13 +100,6 @@ public class GameManager : MonoBehaviour
                 {
                     tM = GameObject.FindGameObjectWithTag("TitleMan").GetComponent<TitleManager>();
                 }
-            }
-
-            if(started == false)
-            {
-                started = true;
-
-                canInput = false;
             }
 
             //switches from controller to keyboard preferred input and back
@@ -108,9 +116,19 @@ public class GameManager : MonoBehaviour
                     tM.CSwitch();
                 }
             }
+
+            //if players are ready, run coroutine to load game scene (loadGS)
+            if(hReady && gReady == true)
+            {
+                if(switching == false)
+                {
+                    switching = true;
+                    StartCoroutine(loadGS());
+                }
+            }
         }
 
-        if(SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(1))
+        if(SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(gameScene))
         {
             if (tXM == null)
             {
@@ -119,28 +137,40 @@ public class GameManager : MonoBehaviour
                     tXM = GameObject.FindGameObjectWithTag("TextMan").GetComponent<TextManager>();
                 }
             }
-        }
 
-        //if any button is pressed and canReset is equal to true, it resets the game
-        if (player.GetAnyButton() && canReset)
-        {
-            canReset = false;
-            end = false;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
-        if (Input.anyKey && canReset)
-        {
-            canReset = false;
-            end = false;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            if(tXM.started == true)
+            {
+                canInput = true;
+            }
+
+            //if any button is pressed and canReset is equal to true, it resets the game
+            if (player.GetAnyButton() && canReset)
+            {
+                canReset = false;
+                end = false;
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
+            if (Input.anyKey && canReset)
+            {
+                canReset = false;
+                end = false;
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            }
         }
 
         if (player.GetButtonDown("Restart"))
         {
             end = false;
             started = false;
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene(titleScene);
         }
+    }
+
+    IEnumerator loadGS()
+    {
+        yield return new WaitForSeconds(2);
+
+        SceneManager.LoadScene(gameScene);
     }
 
     //if the human wins, it plays the win sound effect, changes title card to say that the human won, and then starts the reset coroutine

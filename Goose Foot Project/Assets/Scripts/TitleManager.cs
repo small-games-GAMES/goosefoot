@@ -11,10 +11,12 @@ public class TitleManager : MonoBehaviour
     public GameObject players;
 
     public TMP_Text title;
-    public TMP_Text tUsing, controls, sPrompt; //control scheme and swtich prompt
-    public TMP_Text hInst, gInst;
+    public TMP_Text tUsing, controls, sPrompt; //control scheme and switch prompt
+    public TMP_Text hInst, gInst; //player instructions
     public string usingKeys, usingCon; //tells the player which one they're using
-    public string hKeys, hCon, gKeys, gCon;
+    public string hKeys, hCon, gKeys, gCon; //tells whether or not players are using keys or controller
+
+    public GameObject hReady, gReady; //ready markers
 
     bool conSwitch = false;
 
@@ -29,7 +31,7 @@ public class TitleManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     void TitleFadeIn()
@@ -39,6 +41,7 @@ public class TitleManager : MonoBehaviour
 
     IEnumerator conPrompt()
     {
+        //title fade-in sequence
         if (title.alpha < 1)
         {
             title.alpha += 0.005f;
@@ -66,6 +69,7 @@ public class TitleManager : MonoBehaviour
 
     public void CSwitch()
     {
+        //switch text from keys to controller and back
         if(conSwitch == false)
         {
             conSwitch = true;

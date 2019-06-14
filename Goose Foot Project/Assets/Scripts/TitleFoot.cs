@@ -13,19 +13,13 @@ public class TitleFoot : MonoBehaviour
     public GameObject leg;
     public GameObject honk;
 
-    Rigidbody2D rB;
     public HingeJoint2D hJF, hJB;
     JointMotor2D hingeMotor;
     public float maxAngVel;
 
-    public Rigidbody2D footRB;
+    Rigidbody2D footRB;
 
     bool isHonking = false;
-
-    public float speed;
-    public float conSpeed; //speed when using a controller
-    public float kSpeedMod; //the amount that the speed is multiplied by when kicking
-    Vector2 moveInp;
 
     bool canKick = true;
     public bool isKicking = false;
@@ -40,7 +34,7 @@ public class TitleFoot : MonoBehaviour
     {
         player = ReInput.players.GetPlayer(playerNum);
 
-        rB = GetComponent<Rigidbody2D>();
+        footRB = GetComponent<Rigidbody2D>();
 
         origLegPos = legRenderer.GetPosition(0);
     }
@@ -54,11 +48,13 @@ public class TitleFoot : MonoBehaviour
 
         if (player.GetButtonDown("KickForward"))
         {
+            print("kick input");
             Kick(footKickForward());
         }
 
         if (player.GetButtonDown("KickBackward"))
         {
+            print("kick input");
             Kick(footKickBackward());
         }
 
@@ -87,6 +83,7 @@ public class TitleFoot : MonoBehaviour
             canKick = false;
 
             StartCoroutine(_insIEnumerator);
+            print("kick called");
         }
     }
 
@@ -106,6 +103,7 @@ public class TitleFoot : MonoBehaviour
         yield return new WaitForSeconds(kickCooldown / 2);
 
         canKick = true;
+        print("kicked");
     }
 
     //turns on the motor for the joint that moves the leg backward and then turns it off after a bit
@@ -124,10 +122,12 @@ public class TitleFoot : MonoBehaviour
         yield return new WaitForSeconds(kickCooldown / 2);
 
         canKick = true;
+        print("kicked");
     }
 
     IEnumerator honkTime()
     {
+        //SM.HONK
         honk.SetActive(true);
         yield return new WaitForSeconds(sm.honk.length);
         honk.SetActive(false);
