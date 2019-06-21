@@ -147,16 +147,16 @@ public class GameManager : MonoBehaviour
             if (player.GetAnyButton() && canReset)
             {
                 canReset = false;
-                canInput = false;
                 end = false;
                 SceneManager.LoadScene(gameScene);
+                canInput = false;
             }
             if (Input.anyKey && canReset)
             {
                 canReset = false;
-                canInput = false;
                 end = false;
                 SceneManager.LoadScene(gameScene);
+                canInput = false;
             }
         }
 
