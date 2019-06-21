@@ -10,6 +10,8 @@ TagManager:
   - TextMan
   - TitleMan
   - SoundMan
+  - GHat
+  - HHat
   layers:
   - Default
   - TransparentFX

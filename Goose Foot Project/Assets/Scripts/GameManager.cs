@@ -47,6 +47,11 @@ public class GameManager : MonoBehaviour
     bool end = false; //game has ended
     public bool canReset; //can reset game to play another round
 
+    //NOTE: doesnt work
+    string winner;
+   private GameObject humanHat;
+   private GameObject gooseHat;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -150,6 +155,8 @@ public class GameManager : MonoBehaviour
                 canInput = false;
                 end = false;
                 SceneManager.LoadScene(gameScene);
+                //check who won
+                StartCoroutine(hat());
             }
             if (Input.anyKey && canReset)
             {
@@ -157,6 +164,7 @@ public class GameManager : MonoBehaviour
                 canInput = false;
                 end = false;
                 SceneManager.LoadScene(gameScene);
+                StartCoroutine(hat());
             }
         }
 
@@ -184,7 +192,9 @@ public class GameManager : MonoBehaviour
             end = true;
             sm.playWin();
             tXM.HWin();
-
+            //saves win
+            winner = "human";
+            
             StartCoroutine(waitThenReset());
         }
     }
@@ -197,6 +207,8 @@ public class GameManager : MonoBehaviour
             end = true;
             sm.playWin();
             tXM.GWin();
+            //saves win
+            winner = "goose";
 
             StartCoroutine(waitThenReset());
         }
@@ -209,5 +221,24 @@ public class GameManager : MonoBehaviour
 
         canReset = true;
         tXM.ResPrompt();
+    }
+
+    IEnumerator hat()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        gooseHat = GameObject.FindGameObjectWithTag("GHat");
+        humanHat = GameObject.FindGameObjectWithTag("HHat");
+
+        if (winner == "goose")
+        {
+            gooseHat.SetActive(true);
+            humanHat.SetActive(false);
+        }
+        else if (winner == "human")
+        {
+            gooseHat.SetActive(false);
+            humanHat.SetActive(true);
+        }
     }
 }
