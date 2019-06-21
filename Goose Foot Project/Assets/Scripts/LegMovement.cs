@@ -8,6 +8,7 @@ public class LegMovement : MonoBehaviour
     Player player;
     public int playerNum;
 
+    GameManager gM;
     public soundManager sm;
 
     Rigidbody2D rB;
@@ -36,39 +37,46 @@ public class LegMovement : MonoBehaviour
     {
         player = ReInput.players.GetPlayer(playerNum);
 
+        gM = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
+
         rB = GetComponent<Rigidbody2D>();
 
         origLegPos = legRenderer.GetPosition(0);
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (player.GetButton("ConSwitch"))
+
+        if (conSwitch == false)
         {
-            if(conSwitch == false)
+            if (gM.useCon == true)
             {
                 conSwitch = true;
                 speed = conSpeed;
             }
         }
+    }
 
-        moveInp = new Vector2(player.GetAxis("HXMove"), player.GetAxis("HYMove"));
-
+    // Update is called once per frame
+    void Update()
+    {
         //anchors origin point of the leg line renderer and updates the end point of the upper leg as the knee moves (uses transformpoint because it's a child object)
         //This makes it look like the leg is all one piece
         legRenderer.SetPosition(0, origLegPos);
         legRenderer.SetPosition(1, transform.TransformPoint(Vector3.zero));
 
-        if (player.GetButtonDown("KickForward"))
+        if (gM.canInput == true)
         {
-            Kick(footKickForward());
+            moveInp = new Vector2(player.GetAxis("HXMove"), player.GetAxis("HYMove"));
+
+            if (player.GetButtonDown("KickForward"))
+            {
+                Kick(footKickForward());
+            }
+
+            if (player.GetButtonDown("KickBackward"))
+            {
+                Kick(footKickBackward());
+            }
         }
 
-        if (player.GetButtonDown("KickBackward"))
-        {
-            Kick(footKickBackward());
-        }
     }
 
     private void FixedUpdate()

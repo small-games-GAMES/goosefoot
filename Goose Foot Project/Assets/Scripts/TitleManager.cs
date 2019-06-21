@@ -85,4 +85,27 @@ public class TitleManager : MonoBehaviour
             gInst.text = gKeys;
         }
     }
+
+    public void hRInd()
+    {
+        StartCoroutine(humanReady());
+    }
+
+    //human ready indicator
+    IEnumerator humanReady()
+    {
+        yield return new WaitForSeconds(1);
+        hReady.SetActive(true);
+    }
+
+    public void gRInd()
+    {
+        StartCoroutine(gooseReady());
+    }
+
+    IEnumerator gooseReady()
+    {
+        yield return new WaitForSeconds(1);
+        gReady.SetActive(true);
+    }
 }

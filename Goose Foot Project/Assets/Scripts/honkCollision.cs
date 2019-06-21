@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class honkCollision : MonoBehaviour
 {
-    public GameManager gm;
+    GameManager gM;
+
+    private void Start()
+    {
+        gM = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.gameObject.tag == "body")
         {
-            gm.GWin();
+            gM.GWin();
         }
     }
 }

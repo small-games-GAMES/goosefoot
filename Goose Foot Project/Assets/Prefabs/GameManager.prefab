@@ -44,4 +44,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNum: 0
+  useCon: 0
+  canInput: 1
+  titleScene: 1
+  gameScene: 2
+  switching: 0
   canReset: 0

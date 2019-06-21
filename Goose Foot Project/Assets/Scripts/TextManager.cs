@@ -29,16 +29,20 @@ public class TextManager : MonoBehaviour
 
     IEnumerator startRoutine()
     {
+        yield return new WaitForSeconds(0.5f);
+
         startText.text = ready;
         startText.enabled = true;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(2);
 
         startText.text = set;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(2);
 
         startText.text = go;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1);
         started = true;
+        yield return new WaitForSeconds(1);
+        startText.enabled = false;
     }
 
     public void HWin()

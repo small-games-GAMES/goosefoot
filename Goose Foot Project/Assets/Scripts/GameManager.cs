@@ -85,13 +85,13 @@ public class GameManager : MonoBehaviour
             {
                 hReady = true;
                 //SM.READYSOUND
-                tM.hReady.SetActive(true); //sets active ready marker
+                tM.hRInd(); //sets active ready marker
             }
             if (player.GetButtonDown("Honk"))
             {
                 gReady = true;
                 //SM.READYSOUND
-                tM.gReady.SetActive(true); //sets active ready marker
+                tM.gRInd(); //sets active ready marker
             }
 
             if (tM == null)
@@ -147,14 +147,16 @@ public class GameManager : MonoBehaviour
             if (player.GetAnyButton() && canReset)
             {
                 canReset = false;
+                canInput = false;
                 end = false;
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                SceneManager.LoadScene(gameScene);
             }
             if (Input.anyKey && canReset)
             {
                 canReset = false;
+                canInput = false;
                 end = false;
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                SceneManager.LoadScene(gameScene);
             }
         }
 
@@ -170,6 +172,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
 
+        canInput = false;
         SceneManager.LoadScene(gameScene);
     }
 
