@@ -16,6 +16,8 @@ public class footScript : MonoBehaviour
 
     public Transform ankleTransform;
 
+    public BoxCollider2D calfCol;
+
     private void Start()
     {
         gM = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
@@ -41,5 +43,35 @@ public class footScript : MonoBehaviour
     {
         calfRenderer.SetPosition(0, lm.gameObject.transform.TransformPoint(Vector3.zero));
         calfRenderer.SetPosition(1, ankleTransform.TransformPoint(Vector3.zero));
+
+        /*
+         * 
+         * uses solution from Swati Patel: http://www.theappguruz.com/blog/add-collider-to-line-renderer-unity
+         * VVVVVVVVVV
+         * 
+         */
+
+        //finds the size of the collider based on the length of the calf
+        calfCol.size = new Vector2(Vector2.Distance(lm.gameObject.transform.TransformPoint(Vector3.zero), ankleTransform.TransformPoint(Vector3.zero)), 1);
+
+        //gets midpoint between the knee and the ankle and places the collider there
+        calfCol.transform.position = (lm.gameObject.transform.TransformPoint(Vector3.zero) + ankleTransform.TransformPoint(Vector3.zero)) / 2;
+
+        // Following lines calculate the angle between startPos and endPos
+        float angle = (Mathf.Abs(lm.gameObject.transform.TransformPoint(Vector3.zero).y - ankleTransform.TransformPoint(Vector3.zero).y) / Mathf.Abs(Mathf.Abs(lm.gameObject.transform.TransformPoint(Vector3.zero).x - ankleTransform.TransformPoint(Vector3.zero).x)));
+
+
+        //if the vertical start position is less than that of the end position and horizontal starting position is greater than that of the end position and vice versa, the angle is multiplied by -1
+        if ((lm.gameObject.transform.TransformPoint(Vector3.zero).y < ankleTransform.TransformPoint(Vector3.zero).y && lm.gameObject.transform.TransformPoint(Vector3.zero).x > ankleTransform.TransformPoint(Vector3.zero).x) || (ankleTransform.TransformPoint(Vector3.zero).y < lm.gameObject.transform.TransformPoint(Vector3.zero).y && ankleTransform.TransformPoint(Vector3.zero).x > lm.gameObject.transform.TransformPoint(Vector3.zero).x))
+        {
+            angle *= -1;
+        }
+
+        //converts the angle to radians and then converts that to degrees (atan returns arc-tangent of angle in radians [big boi trigonometry])
+        angle = Mathf.Rad2Deg * Mathf.Atan(angle);
+
+        //rotates the collider accordingly
+        calfCol.transform.Rotate(0, 0, angle);
+
     }
 }
