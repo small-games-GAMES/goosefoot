@@ -28,6 +28,7 @@ public class LegMovement : MonoBehaviour
     public float kickCooldown;
 
     public LineRenderer legRenderer; //line renderer stuff so the leg looks like it's one solid piece
+    public BoxCollider2D legCollider;
     Vector3 origLegPos;
 
     bool conSwitch = false;
@@ -59,8 +60,7 @@ public class LegMovement : MonoBehaviour
     {
         //anchors origin point of the leg line renderer and updates the end point of the upper leg as the knee moves (uses transformpoint because it's a child object)
         //This makes it look like the leg is all one piece
-        legRenderer.SetPosition(0, origLegPos);
-        legRenderer.SetPosition(1, transform.TransformPoint(Vector3.zero));
+        updateLeg();
 
         if (gM.canInput == true)
         {
@@ -161,4 +161,43 @@ public class LegMovement : MonoBehaviour
             footRB.angularVelocity = footRB.angularVelocity;
         }
     }
+
+    public void updateLeg()
+    {
+
+        legRenderer.SetPosition(1, transform.TransformPoint(Vector3.zero));
+
+        /*
+         * 
+         * uses solution from Swati Patel: http://www.theappguruz.com/blog/add-collider-to-line-renderer-unity
+         * VVVVVVVVVV
+         * 
+         */
+
+        //finds the size of the collider based on the length of the leg
+        legCollider.size = new Vector2(Vector2.Distance(origLegPos, transform.TransformPoint(Vector3.zero)), 1);
+
+        //gets midpoint between the body and the knee and places the collider there
+        legCollider.transform.position = (origLegPos + transform.TransformPoint(Vector3.zero)) / 2;
+
+        // Following lines calculate the angle between startPos and endPos (makes a right triangle) (height / width)
+        float angle = (Mathf.Abs(origLegPos.y - transform.TransformPoint(Vector3.zero).y) / Mathf.Abs(Mathf.Abs(origLegPos.x - transform.TransformPoint(Vector3.zero).x)));
+
+
+        //if the vertical start position is less than that of the end position and horizontal starting position is greater than that of the end position and vice versa, the angle is multiplied by -1
+        if ((origLegPos.y < transform.TransformPoint(Vector3.zero).y && origLegPos.x > transform.TransformPoint(Vector3.zero).x) || (transform.TransformPoint(Vector3.zero).y < origLegPos.y && transform.TransformPoint(Vector3.zero).x > origLegPos.x))
+        {
+            angle *= -1;
+        }
+
+        //converts angle to radians and then converts that to degrees (atan returns arc-tangent of angle in radians [big boi trigonometry])
+        //atan creates an angle based on the length of a side (in this case, the big boi hypotenuse)
+        angle = Mathf.Rad2Deg * Mathf.Atan(angle);
+
+        //rotates the collider accordingly
+        legCollider.transform.rotation = Quaternion.Euler(0,0,angle);
+
+
+    }
+
 }

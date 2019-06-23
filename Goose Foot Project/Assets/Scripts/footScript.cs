@@ -57,7 +57,7 @@ public class footScript : MonoBehaviour
         //gets midpoint between the knee and the ankle and places the collider there
         calfCol.transform.position = (lm.gameObject.transform.TransformPoint(Vector3.zero) + ankleTransform.TransformPoint(Vector3.zero)) / 2;
 
-        // Following lines calculate the angle between startPos and endPos
+        // Following lines calculate the angle between startPos and endPos (makes a right triangle) (height / width)
         float angle = (Mathf.Abs(lm.gameObject.transform.TransformPoint(Vector3.zero).y - ankleTransform.TransformPoint(Vector3.zero).y) / Mathf.Abs(Mathf.Abs(lm.gameObject.transform.TransformPoint(Vector3.zero).x - ankleTransform.TransformPoint(Vector3.zero).x)));
 
 
@@ -71,7 +71,7 @@ public class footScript : MonoBehaviour
         angle = Mathf.Rad2Deg * Mathf.Atan(angle);
 
         //rotates the collider accordingly
-        calfCol.transform.Rotate(0, 0, angle);
+        calfCol.transform.rotation = Quaternion.Euler(0, 0, angle);
 
     }
 }
