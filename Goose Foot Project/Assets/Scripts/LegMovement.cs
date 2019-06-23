@@ -195,6 +195,7 @@ public class LegMovement : MonoBehaviour
         angle = Mathf.Rad2Deg * Mathf.Atan(angle);
 
         //rotates the collider accordingly
+        //don't use transform.rotate for this part because it just makes the collider spin out of control since this is in update
         legCollider.transform.rotation = Quaternion.Euler(0,0,angle);
 
 
